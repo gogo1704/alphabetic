@@ -8,7 +8,7 @@ Add this crate by running `cargo add alphabetic`:
 >cargo add alphabetic
 ```
 ## Getting Started
-See [API Docs](docs.rs/crate/alphabetic/0.1.0)
+See [API Docs](https://docs.rs/crate/alphabetic)
 ## License
 
 This crate is published under the terms of the GPL-3.0 license.
