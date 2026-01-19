@@ -53,7 +53,7 @@ impl AlphabeticLetter {
     ```
 
     # Errors
-    Function will error if `input` constains any not alphabetic characters.
+    Function will error if `input` contains any not alphabetic characters.
 
      */
     pub fn from_string(input: &str) -> Result<Vec<AlphabeticLetter>, &'static str> {
