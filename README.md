@@ -5,7 +5,7 @@
 ## Usage
 Add this crate by running `cargo add alphabetic`:
 ```
->cargo add alphabetic
+> cargo add alphabetic
 ```
 ## Getting Started
 See [API Docs](https://docs.rs/crate/alphabetic)
