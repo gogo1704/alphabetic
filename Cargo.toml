@@ -1,0 +1,7 @@
+[package]
+name = "alphabetic"
+description = "Simple crate featuring [`AlphabeticLetter`] struct, that represents a letter in Latin-script alphabet."
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
