@@ -28,4 +28,8 @@ assert_eq!(new_string, "Must");
 ```
 */
 mod alphabetic;
+mod enums;
+mod error;
 pub use crate::alphabetic::*;
+pub use crate::enums::*;
+pub use crate::error::*;

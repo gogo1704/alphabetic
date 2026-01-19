@@ -1,19 +1,9 @@
-#![warn(clippy::pedantic)]
-#![warn(missing_docs, rustdoc::all)]
-
 // TODO: Custom error type.
 // TODO: Figure out better conversions.
 
+use crate::{Error, LetterCase, Result};
 use std::fmt::Display;
-/// A type representing a letter case.
-#[derive(Debug, PartialEq, Eq, Default, Clone, Copy, Hash)]
-pub enum LetterCase {
-    /// Lower case letter (e.g. 'a', 'b')
-    #[default]
-    Lowercase,
-    /// Upper case letter (e.g. 'A', 'B')
-    Uppercase,
-}
+
 /// A type representing a letter of Latin-script alphabet.
 #[derive(Debug, PartialEq, Eq, Default, Clone, Copy, Hash)]
 pub struct AlphabeticLetter {
@@ -53,14 +43,14 @@ impl AlphabeticLetter {
     ```
 
     # Errors
-    Function will error if `input` contains any not alphabetic characters.
+    Function will error if `input` contains any non-alphabetic characters.
 
      */
-    pub fn from_string(input: &str) -> Result<Vec<AlphabeticLetter>, &'static str> {
+    pub fn from_string(input: &str) -> Result<Vec<AlphabeticLetter>> {
         input
             .chars()
             .map(AlphabeticLetter::try_from)
-            .collect::<Result<Vec<AlphabeticLetter>, &'static str>>()
+            .collect::<Result<Vec<AlphabeticLetter>>>()
     }
 
     /**
@@ -113,9 +103,9 @@ impl AlphabeticLetter {
 }
 
 impl TryFrom<u8> for AlphabeticLetter {
-    type Error = &'static str;
+    type Error = Error;
 
-    fn try_from(value: u8) -> Result<Self, Self::Error> {
+    fn try_from(value: u8) -> Result<AlphabeticLetter> {
         if value.is_ascii_lowercase() {
             Ok(AlphabeticLetter {
                 index: value - b'a',
@@ -127,7 +117,7 @@ impl TryFrom<u8> for AlphabeticLetter {
                 case: LetterCase::Uppercase,
             })
         } else {
-            Err("not a letter")
+            Err(Error)
         }
     }
 }
@@ -142,14 +132,14 @@ impl From<AlphabeticLetter> for u8 {
 }
 
 impl TryFrom<char> for AlphabeticLetter {
-    type Error = &'static str;
+    type Error = Error;
 
-    fn try_from(value: char) -> Result<Self, Self::Error> {
+    fn try_from(value: char) -> Result<Self> {
         if !value.is_ascii_alphabetic() {
-            return Err("not a letter");
+            return Err(Error);
         }
         let Ok(byte) = u8::try_from(value) else {
-            return Err("not a letter");
+            return Err(Error);
         };
         if value.is_ascii_lowercase() {
             return Ok(AlphabeticLetter {
@@ -192,6 +182,7 @@ impl Display for AlphabeticLetter {
 
 #[cfg(test)]
 mod tests {
+
     use super::{AlphabeticLetter, LetterCase};
 
     #[test]
@@ -267,5 +258,10 @@ mod tests {
         let char = AlphabeticLetter::try_from('B')?;
         assert_eq!(format!("{char}"), "B");
         Ok(())
+    }
+    #[test]
+    fn empty_string() {
+        let vector = AlphabeticLetter::from_string("").unwrap();
+        assert_eq!(vector.len(), 0);
     }
 }
