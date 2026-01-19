@@ -1,6 +1,9 @@
 #![warn(clippy::pedantic)]
 #![warn(missing_docs, rustdoc::all)]
 
+// TODO: Custom error type.
+// TODO: Figure out better conversions.
+
 use std::fmt::Display;
 /// A type representing a letter case.
 #[derive(Debug, PartialEq, Eq, Default, Clone, Copy, Hash)]
@@ -39,6 +42,28 @@ impl AlphabeticLetter {
     }
 
     /**
+    Constructs [`AlphabeticLetter`] from a string.
+
+    # Example
+    ```
+    # use alphabetic::{AlphabeticLetter,LetterCase};
+    let vector = AlphabeticLetter::from_string("Hi").unwrap();
+    assert_eq!(char::from(vector.get(0).unwrap()),'H');
+    assert_eq!(char::from(vector.get(1).unwrap()),'i');
+    ```
+
+    # Errors
+    Function will error if `input` constains any not alphabetic characters.
+
+     */
+    pub fn from_string(input: &str) -> Result<Vec<AlphabeticLetter>, &'static str> {
+        input
+            .chars()
+            .map(AlphabeticLetter::try_from)
+            .collect::<Result<Vec<AlphabeticLetter>, &'static str>>()
+    }
+
+    /**
     Returns position in alphabet.
 
     # Example
@@ -57,7 +82,7 @@ impl AlphabeticLetter {
     }
 
     /**
-    Shifts [`index`](AlphabeticLetter::index) by `amount` places forward or backward in alphabet. Wraps around when reaching the end.
+    Shifts [`AlphabeticLetter`] by `amount` places forward or backward in alphabet. Wraps around when reaching the end.
 
     # Examples
     ```
@@ -69,23 +94,13 @@ impl AlphabeticLetter {
     # Ok(())
     # }
     ```
+    Changing first letter of a string:
     ```
-    # use alphabetic::{AlphabeticLetter};
-    # fn main() -> Result<(),&'static str> {
-    let mut letter = AlphabeticLetter::try_from('z')?;
-    letter.shift(2);
-    assert_eq!(char::from(letter),'b');
-    # Ok(())
-    # }
-    ```
-    ```
-    # use alphabetic::{AlphabeticLetter};
-    # fn main() -> Result<(),&'static str> {
-    let mut letter = AlphabeticLetter::try_from('o')?;
-    letter.shift(-3);
-    assert_eq!(char::from(letter),'l');
-    # Ok(())
-    # }
+    # use alphabetic::{AlphabeticLetter,LetterCase};
+    let mut vector = AlphabeticLetter::from_string("Rust").unwrap();
+    vector.first_mut().unwrap().shift(-5);
+    let new_string = vector.into_iter().map(char::from).collect::<String>();
+    assert_eq!(new_string, "Must");
     ```
     */
     pub fn shift(&mut self, amount: i32) {
@@ -153,6 +168,15 @@ impl TryFrom<char> for AlphabeticLetter {
 
 impl From<AlphabeticLetter> for char {
     fn from(val: AlphabeticLetter) -> Self {
+        match val.case {
+            LetterCase::Lowercase => (val.index + b'a').into(),
+            LetterCase::Uppercase => (val.index + b'A').into(),
+        }
+    }
+}
+
+impl From<&AlphabeticLetter> for char {
+    fn from(val: &AlphabeticLetter) -> Self {
         match val.case {
             LetterCase::Lowercase => (val.index + b'a').into(),
             LetterCase::Uppercase => (val.index + b'A').into(),
