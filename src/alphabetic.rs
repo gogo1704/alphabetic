@@ -79,8 +79,7 @@ impl AlphabeticLetter {
     # use alphabetic::{AlphabeticLetter, Result};
     # fn main() -> Result<()> {
     let mut letter = AlphabeticLetter::try_from('A')?;
-    letter.shift(5);
-    assert_eq!(char::from(letter),'F');
+    assert_eq!(char::from(letter.shift(5)),'F');
     # Ok(())
     # }
     ```
@@ -93,12 +92,13 @@ impl AlphabeticLetter {
     assert_eq!(new_string, "Must");
     ```
     */
-    pub fn shift(&mut self, amount: i32) {
+    pub fn shift(&mut self, amount: i32) -> &Self {
         // Casting here should be safe, because of modulo and adding positive integer.
         #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
         let offset: u8 =
             (amount % i32::from(Self::ALPHABET_SIZE) + i32::from(Self::ALPHABET_SIZE)) as u8;
         self.index = (self.index + offset) % Self::ALPHABET_SIZE;
+        self
     }
 }
 
