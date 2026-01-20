@@ -93,8 +93,11 @@ impl AlphabeticLetter {
     ```
     */
     pub fn shift(&mut self, amount: i32) -> &Self {
-        // Casting here should be safe, because of modulo and adding positive integer.
-        #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+        #[expect(
+            clippy::cast_possible_truncation,
+            clippy::cast_sign_loss,
+            reason = "casting here should be safe, because of modulo and adding positive integer"
+        )]
         let offset: u8 =
             (amount % i32::from(Self::ALPHABET_SIZE) + i32::from(Self::ALPHABET_SIZE)) as u8;
         self.index = (self.index + offset) % Self::ALPHABET_SIZE;
