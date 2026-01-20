@@ -10,8 +10,8 @@ Provides [`shift()`](AlphabeticLetter::shift()) method that shifts [`AlphabeticL
 
 # Examples
 ```
-# use alphabetic::{AlphabeticLetter};
-# fn main() -> Result<(),&'static str> {
+# use alphabetic::{AlphabeticLetter, Result};
+# fn main() -> Result<()> {
 let mut letter = AlphabeticLetter::try_from('A')?;
 letter.shift(5);
 assert_eq!(char::from(letter),'F');

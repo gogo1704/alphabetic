@@ -1,7 +1,7 @@
 // TODO: Custom error type.
 // TODO: Figure out better conversions.
 
-use crate::{Error, LetterCase, Result};
+use crate::{LetterCase, NotAlphabeticError, Result};
 use std::fmt::Display;
 
 /// A type representing a letter of Latin-script alphabet.
@@ -58,8 +58,8 @@ impl AlphabeticLetter {
 
     # Example
     ```
-    # use alphabetic::{AlphabeticLetter};
-    # fn main() -> Result<(),&'static str> {
+    # use alphabetic::{AlphabeticLetter, Result};
+    # fn main() -> Result<()> {
     let letter = AlphabeticLetter::try_from('d')?;
     assert_eq!(letter.index(),3);
     # Ok(())
@@ -76,8 +76,8 @@ impl AlphabeticLetter {
 
     # Examples
     ```
-    # use alphabetic::{AlphabeticLetter};
-    # fn main() -> Result<(),&'static str> {
+    # use alphabetic::{AlphabeticLetter, Result};
+    # fn main() -> Result<()> {
     let mut letter = AlphabeticLetter::try_from('A')?;
     letter.shift(5);
     assert_eq!(char::from(letter),'F');
@@ -103,7 +103,7 @@ impl AlphabeticLetter {
 }
 
 impl TryFrom<u8> for AlphabeticLetter {
-    type Error = Error;
+    type Error = NotAlphabeticError;
 
     fn try_from(value: u8) -> Result<AlphabeticLetter> {
         if value.is_ascii_lowercase() {
@@ -117,7 +117,7 @@ impl TryFrom<u8> for AlphabeticLetter {
                 case: LetterCase::Uppercase,
             })
         } else {
-            Err(Error)
+            Err(NotAlphabeticError)
         }
     }
 }
@@ -132,14 +132,14 @@ impl From<AlphabeticLetter> for u8 {
 }
 
 impl TryFrom<char> for AlphabeticLetter {
-    type Error = Error;
+    type Error = NotAlphabeticError;
 
     fn try_from(value: char) -> Result<Self> {
         if !value.is_ascii_alphabetic() {
-            return Err(Error);
+            return Err(NotAlphabeticError);
         }
         let Ok(byte) = u8::try_from(value) else {
-            return Err(Error);
+            return Err(NotAlphabeticError);
         };
         if value.is_ascii_lowercase() {
             return Ok(AlphabeticLetter {

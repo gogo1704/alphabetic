@@ -1,12 +1,7 @@
-use std::fmt::Display;
+/// Result of a value conversion process.
+pub type Result<T> = std::result::Result<T, NotAlphabeticError>;
 
-pub type Result<T> = std::result::Result<T, Error>;
-
-#[derive(Debug, thiserror::Error)]
-pub struct Error;
-
-impl Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Error")
-    }
-}
+/// The generic error type for conversion.
+#[derive(Debug, thiserror::Error, Default)]
+#[error("invalid parameter (doesn't represent ASCII letter characters)")]
+pub struct NotAlphabeticError;
