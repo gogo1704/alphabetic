@@ -14,9 +14,25 @@ pub struct AlphabeticLetter {
 impl AlphabeticLetter {
     /// Number of letters in an alphabet.
     pub const ALPHABET_SIZE: u8 = 26;
-
     /**
     Constructs [`AlphabeticLetter`] from position in alphabet and letter case.
+    Same as [`AlphabeticLetter::from_index()`].
+
+    # Example
+    ```
+    # use alphabetic::{AlphabeticLetter,LetterCase};
+    let letter = AlphabeticLetter::new(2, LetterCase::Uppercase);
+    assert_eq!(char::from(letter),'C');
+
+    ```
+    */
+    #[must_use]
+    pub fn new(index: u8, case: LetterCase) -> Self {
+        AlphabeticLetter::from_index(index, case)
+    }
+    /**
+    Constructs [`AlphabeticLetter`] from position in alphabet and letter case.
+    Same as [`AlphabeticLetter::new()`].
 
     # Example
     ```
