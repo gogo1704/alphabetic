@@ -12,7 +12,7 @@ pub struct AlphabeticLetter {
 }
 
 impl AlphabeticLetter {
-    /// Number of letters in alphabet.
+    /// Number of letters in an alphabet.
     pub const ALPHABET_SIZE: u8 = 26;
 
     /**
