@@ -72,7 +72,7 @@ impl AlphabeticLetter {
     }
 
     /**
-    Shifts [`AlphabeticLetter`] by `amount` places forward or backward in alphabet. Wraps around when reaching the end.
+    Shifts [`AlphabeticLetter`] by `amount` places forward or backward in alphabet and returns. Wraps around when reaching the end.
 
     # Examples
     ```
