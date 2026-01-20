@@ -6,7 +6,7 @@
 
 "Alphabetic" is simple crate featuring [`AlphabeticLetter`] struct, that represents a letter in Latin-script alphabet.
 
-Provides [`shift()`](AlphabeticLetter::shift()) method that shifts [`AlphabeticLetter`] forward or backward in alphabet. Wraps around when reaching the end.
+Provides [`AlphabeticLetter::shift()`] method that shifts forward or backward in alphabet. Wraps around when reaching the end.
 
 # Examples
 ```
