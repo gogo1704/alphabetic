@@ -27,7 +27,7 @@ impl AlphabeticLetter {
     ```
     */
     #[must_use]
-    pub fn new(index: u8, case: LetterCase) -> Self {
+    pub fn new<T: Into<u8>>(index: T, case: LetterCase) -> Self {
         AlphabeticLetter::from_index(index, case)
     }
     /**
@@ -43,8 +43,11 @@ impl AlphabeticLetter {
     ```
     */
     #[must_use]
-    pub fn from_index(index: u8, case: LetterCase) -> Self {
-        AlphabeticLetter { index, case }
+    pub fn from_index<T: Into<u8>>(index: T, case: LetterCase) -> Self {
+        AlphabeticLetter {
+            index: index.into(),
+            case,
+        }
     }
 
     /**
@@ -62,7 +65,7 @@ impl AlphabeticLetter {
     Function will error if `input` contains any non-alphabetic characters.
 
      */
-    pub fn from_string(input: &str) -> Result<Vec<AlphabeticLetter>> {
+    pub fn try_from_string(input: &str) -> Result<Vec<AlphabeticLetter>> {
         input
             .chars()
             .map(AlphabeticLetter::try_from)
@@ -86,7 +89,22 @@ impl AlphabeticLetter {
     pub fn index(&self) -> u8 {
         self.index
     }
+    /**
+    Returns letter case.
 
+    # Example
+    ```
+    # use alphabetic::{AlphabeticLetter, Result, LetterCase};
+    # fn main() -> Result<()> {
+    let letter = AlphabeticLetter::try_from('d')?;
+    assert_eq!(letter.case(),LetterCase::Lowercase);
+    # Ok(())
+    # }
+    ```
+    */
+    pub fn case(&self) -> LetterCase {
+        self.case
+    }
     /**
     Shifts [`AlphabeticLetter`] by `amount` places forward or backward in alphabet and returns. Wraps around when reaching the end.
 
@@ -280,7 +298,7 @@ mod tests {
     }
     #[test]
     fn empty_string() {
-        let vector = AlphabeticLetter::from_string("").unwrap();
+        let vector = AlphabeticLetter::try_from_string("").unwrap();
         assert_eq!(vector.len(), 0);
     }
 }
