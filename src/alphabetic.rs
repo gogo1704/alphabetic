@@ -102,6 +102,7 @@ impl AlphabeticLetter {
     # }
     ```
     */
+    #[must_use]
     pub fn case(&self) -> LetterCase {
         self.case
     }
