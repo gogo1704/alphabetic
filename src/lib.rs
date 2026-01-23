@@ -21,7 +21,7 @@ assert_eq!(char::from(letter),'F');
 Changing first letter of a string:
 ```
 # use alphabetic::{AlphabeticLetter,LetterCase};
-let mut vector = AlphabeticLetter::from_string("Rust").unwrap();
+let mut vector = AlphabeticLetter::try_from_string("Rust").unwrap();
 vector.first_mut().unwrap().shift(-5);
 let new_string = vector.into_iter().map(char::from).collect::<String>();
 assert_eq!(new_string, "Must");

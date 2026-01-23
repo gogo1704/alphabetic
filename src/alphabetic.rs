@@ -45,7 +45,8 @@ impl AlphabeticLetter {
     #[must_use]
     pub fn from_index<T: Into<u8>>(index: T, case: LetterCase) -> Self {
         AlphabeticLetter {
-            index: index.into(),
+            index: ((index.into() % Self::ALPHABET_SIZE) + Self::ALPHABET_SIZE)
+                % Self::ALPHABET_SIZE,
             case,
         }
     }
@@ -56,7 +57,7 @@ impl AlphabeticLetter {
     # Example
     ```
     # use alphabetic::{AlphabeticLetter,LetterCase};
-    let vector = AlphabeticLetter::from_string("Hi").unwrap();
+    let vector = AlphabeticLetter::try_from_string("Hi").unwrap();
     assert_eq!(char::from(vector.get(0).unwrap()),'H');
     assert_eq!(char::from(vector.get(1).unwrap()),'i');
     ```
@@ -121,7 +122,7 @@ impl AlphabeticLetter {
     Changing first letter of a string:
     ```
     # use alphabetic::{AlphabeticLetter,LetterCase};
-    let mut vector = AlphabeticLetter::from_string("Rust").unwrap();
+    let mut vector = AlphabeticLetter::try_from_string("Rust").unwrap();
     vector.first_mut().unwrap().shift(-5);
     let new_string = vector.into_iter().map(char::from).collect::<String>();
     assert_eq!(new_string, "Must");
